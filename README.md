@@ -1,7 +1,7 @@
-Notícias API
+## Notícias API
 Esta é uma API RESTful simples para gerenciar notícias.
 
-Endpoints
+## Endpoints
 Listar Notícias
 GET /news
 
@@ -17,10 +17,10 @@ PUT /news/{id}
 Deletar Notícia
 DELETE /news/{id}
 
-Exemplo de Requisição
+## Exemplo de Requisição
 Para criar uma nova notícia:
 
-Parâmetros Opcionais
+## Parâmetros Opcionais
 data_criacao: Data de criação da notícia (formato YYYY). Este parâmetro é opcional e tem um valor padrão de 'N/A' se não for fornecido.
 Códigos de Status
 200 OK: Operação realizada com sucesso.
