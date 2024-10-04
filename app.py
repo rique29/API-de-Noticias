@@ -9,11 +9,14 @@ api = Api(app=app, version='1.0', title='Notícias API')
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
 
+# Configurar o Swagger UI
 swaggerui_blueprint = swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={  # Configurações do Swagger UI
-        'app_name': "Notícias API"
+    config={
+        'app_name': "Notícias API",
+        'title': "Notícias API",
+        'version': "1.0"
     }
 )
 
@@ -24,27 +27,28 @@ required_fields = ['titulo', 'corpo', 'autor']
 noticias = [
     {
         'id': 1,
-        'titulo': 'Reciclavel',
-        'Corpo_da_noticia': 'materiais',
-        'Autor': 'Paulo',
-        'Data_de_Criação': 2024
+        'titulo': 'Reciclável',
+        'corpo': 'Materiais',
+        'autor': 'Paulo',
+        'data_criacao': 2024
     },
     {
         'id': 2,
         'titulo': 'Chaves',
-        'Corpo_da_noticia': 'chaves misteriosas',
-        'Autor': 'Marlene',
-        'Data_de_Criação': 2023
+        'corpo': 'Chaves misteriosas',
+        'autor': 'Marlene',
+        'data_criacao': 2023
     },
     {
         'id': 3,
         'titulo': 'Gavetas',
-        'Corpo_da_noticia': 'gavetas abertas',
-        'Autor': 'João',
-        'Data_de_Criação': 2021
+        'corpo': 'Gavetas abertas',
+        'autor': 'João',
+        'data_criacao': 2021
     }
 ]
 
+# Rotas da API
 @app.route('/news', methods=['GET'])
 def listar_noticias():
     return jsonify(noticias)
@@ -68,9 +72,9 @@ def criar_nova_noticia():
     
     nova_noticia = {
         'id': len(noticias) + 1,
-        'titulo': dados['titulo'],
-        'corpo': dados['corpo'],
-        'autor': dados['autor'],
+        'titulo': dados.get('titulo'),
+        'corpo': dados.get('corpo'),
+        'autor': dados.get('autor'),
         'data_criacao': str(dados.get('data_criacao', 'N/A'))
     }
     noticias.append(nova_noticia)
@@ -88,11 +92,13 @@ def atualizar_noticia(id):
             if field not in dados:
                 return jsonify({f"error": f"{field} não encontrado"}), 400
         
-        noticia['titulo'] = dados.get('titulo', noticia['titulo'])
-        noticia['corpo'] = dados.get('corpo', noticia['corpo'])
-        noticia['autor'] = dados.get('autor', noticia['autor'])
-        noticia['data_criacao'] = str(dados.get('data_criacao', noticia['data_criacao']))
-        return jsonify(noticia)
+        noticia.update({
+            'titulo': dados.get('titulo', noticia['titulo']),
+            'corpo': dados.get('corpo', noticia['corpo']),
+            'autor': dados.get('autor', noticia['autor']),
+            'data_criacao': str(dados.get('data_criacao', noticia['data_criacao']))
+        })
+        return jsonify(noticia), 200
     return jsonify({'message': 'Notícia não encontrada'}), 404
 
 @app.route('/news/<int:id>', methods=['DELETE'])
@@ -101,4 +107,4 @@ def deletar_noticia(id):
     return '', 204
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
